@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Khushi 🎉</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffd6e8, #e6d9ff);
+    overflow-x: hidden;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    text-align: center;
+    animation: fadeIn 2s ease;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+}
+
+.message {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    background: rgba(255,255,255,0.8);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: slideUp 1.5s ease;
+}
+
+button {
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    background: #ff6fa5;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes slideUp {
+    from {transform: translateY(40px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+    <h1>🎂 Happy Birthday, Khushi 🎉</h1>
+
+    <div class="message">
+        Hi Khushi! 🥳✨<br><br>
+        Wishing you a very happy birthday 🎉🎂<br>
+        You are one of the best people I met during our office days 🤍<br><br>
+        I truly loved eating and sharing tiffin with you 🍱😄 — those moments were simple, fun, and memorable.<br>
+        I really enjoyed the time we spent together 🫶<br><br>
+        Stay happy 😊, healthy 💪, and wealthy 🤑<br>
+        Wishing you great success and hoping you achieve your dream position of <b>CMO</b> very soon 🚀👑
+    </div>
+
+    <button onclick="launchFireworks()">🎆 Celebrate 🎆</button>
+</div>
+
+<script>
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fireworks = [];
+
+function Firework() {
+    this.x = Math.random() * canvas.width;
+    this.y = canvas.height;
+    this.targetY = Math.random() * canvas.height / 2;
+    this.color = `hsl(${Math.random() * 360},100%,70%)`;
+    this.radius = 2;
+    this.speed = Math.random() * 3 + 2;
+}
+
+Firework.prototype.update = function () {
+    this.y -= this.speed;
+    if (this.y <= this.targetY) {
+        for (let i = 0; i < 40; i++) {
+            fireworks.push(new Particle(this.x, this.y, this.color));
+        }
+        return true;
+    }
+    return false;
+};
+
+Firework.prototype.draw = function () {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+};
+
+function Particle(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.radius = 2;
+    this.life = 100;
+    this.dx = (Math.random() - 0.5) * 6;
+    this.dy = (Math.random() - 0.5) * 6;
+}
+
+Particle.prototype.update = function () {
+    this.x += this.dx;
+    this.y += this.dy;
+    this.life--;
+};
+
+Particle.prototype.draw = function () {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+};
+
+function launchFireworks() {
+    for (let i = 0; i < 6; i++) {
+        fireworks.push(new Firework());
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fireworks = fireworks.filter(obj => {
+        if (obj instanceof Firework) {
+            obj.draw();
+            return !obj.update();
+        } else {
+            obj.draw();
+            obj.update();
+            return obj.life > 0;
+        }
+    });
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>
